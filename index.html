@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Custom Android OS - Berbasis NusantaraProject</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3ddc84;
+            --primary-dark: #2ca069;
+            --secondary: #4285f4;
+            --accent: #ff6b6b;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --darkest: #0f0f23;
+            --text: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --card-bg: #1e1e2e;
+            --card-border: #2d2d44;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darkest);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(ellipse at center, rgba(61, 220, 132, 0.05) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 2rem 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(61, 220, 132, 0.1);
+            border: 1px solid rgba(61, 220, 132, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(61, 220, 132, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 4rem;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Badges Section */
+        .badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-android {
+            background: rgba(61, 220, 132, 0.15);
+            color: var(--primary);
+        }
+
+        .badge-aosp {
+            background: rgba(66, 133, 244, 0.15);
+            color: var(--secondary);
+        }
+
+        .badge-license {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        .badge-status {
+            background: rgba(156, 39, 176, 0.15);
+            color: #ce93d8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(61, 220, 132, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon.green {
+            background: rgba(61, 220, 132, 0.15);
+            color: var(--primary);
+        }
+
+        .card-icon.blue {
+            background: rgba(66, 133, 244, 0.15);
+            color: var(--secondary);
+        }
+
+        .card-icon.purple {
+            background: rgba(156, 39, 176, 0.15);
+            color: #ce93d8;
+        }
+
+        .card-icon.orange {
+            background: rgba(255, 152, 0, 0.15);
+            color: #ff9800;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Prerequisites Section */
+        .prereq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .prereq-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(61, 220, 132, 0.05) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prereq-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .prereq-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prereq-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .prereq-list {
+            list-style: none;
+        }
+
+        .prereq-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        .prereq-list li i {
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .prereq-min {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--accent);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .prereq-recommended {
+            display: inline-block;
+            background: rgba(61, 220, 132, 0.15);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* Steps Section */
+        .steps-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 35px;
+            top: 80px;
+            bottom: -30px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block {
+            background: var(--dark);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .code-block code {
+            color: var(--text);
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .command {
+            color: var(--primary);
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .flow-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, var(--card-bg), var(--dark));
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .flow-box i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-box span {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-table th {
+            background: var(--dark);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(61, 220, 132, 0.05);
+        }
+
+        /* Menu Preview */
+        .menu-preview {
+            background: var(--dark);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .menu-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .menu-header h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--card-border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: rgba(61, 220, 132, 0.1);
+            padding-left: 1rem;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-num {
+            color: var(--primary);
+            font-weight: 700;
+            width: 30px;
+        }
+
+        .menu-icon {
+            font-size: 1.2rem;
+        }
+
+        /* FAQ Section */
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq-question:hover {
+            background: rgba(61, 220, 132, 0.05);
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            border-top: 1px solid var(--card-border);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 4px 20px rgba(61, 220, 132, 0.4);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .flow-steps {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: transparent;
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--darkest);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--card-border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card-bg);
+            border: 1px solid var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Memuat...</div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <i class="fab fa-android"></i>
+                <span>Custom ROM Guide</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Fitur</a></li>
+                <li><a href="#prerequisites">Prasyarat</a></li>
+                <li><a href="#installation">Instalasi</a></li>
+                <li><a href="#build">Build</a></li>
+                <li><a href="#customize">Kustomisasi</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-rocket"></i>
+            <span>Open Source Project</span>
+        </div>
+        <h1 class="hero-title">Custom Android OS</h1>
+        <p class="hero-subtitle">
+            Buat Custom ROM Android Anda sendiri berbasis NusantaraProject. 
+            Gratis, open-source, dan mudah diikuti langkah demi langkah.
+        </p>
+        <div class="hero-buttons">
+            <a href="#installation" class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Mulai Sekarang
+            </a>
+            <a href="https://github.com/antono4/Custom-Android-OS-from-NusantaraROM" target="_blank" class="btn btn-secondary">
+                <i class="fab fa-github"></i>
+                GitHub Repo
+            </a>
+        </div>
+        <div class="badges">
+            <span class="badge badge-android">
+                <i class="fab fa-android"></i> Android 12.0.0_r16
+            </span>
+            <span class="badge badge-aosp">
+                <i class="fab fa-google"></i> AOSP
+            </span>
+            <span class="badge badge-license">
+                <i class="fas fa-file-contract"></i> GPL-3.0
+            </span>
+            <span class="badge badge-status">
+                <i class="fas fa-check-circle"></i> Ready to Build
+            </span>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-value">173+</div>
+                <div class="stat-label">Repositories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Android Version</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Open Source</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">✨ Fitur</span>
+                <h2 class="section-title">Kenapa Berbasis NusantaraProject?</h2>
+                <p class="section-desc">
+                    NusantaraProject adalah custom ROM Indonesia yang bersih, stabil, dan mudah dimodifikasi
+                </p>
+            </div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon green">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <h3 class="card-title">🇮🇩 Buatan Indonesia</h3>
+                    <p class="card-text">
+                        Dikembangkan oleh developer Indonesia dengan pemahaman mendalam tentang kebutuhan pengguna Indonesia.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-icon blue">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3 class="card-title">📦 Clean Experience</h3>
+                    <p class="card-text">
+                        Bebas bloatware dan iklan. Nikmati pengalaman Android murni tanpa gangguan.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-icon purple">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="card-title">🔧 Highly Customizable</h3>
+                    <p class="card-text">
+                        Mudah dimodifikasi sesuai kebutuhan. Ubah nama, branding, tema, dan fitur sesuka hati.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-icon orange">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="card-title">📱 Multi-Device</h3>
+                    <p class="card-text">
+                        Support banyak perangkat dari berbagai manufacturer: Pixel, Xiaomi, Realme, Samsung, dll.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Detail -->
+    <section class="section" style="background: var(--dark);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🎨 Kustomisasi</span>
+                <h2 class="section-title">Fitur yang Bisa Dikustomisasi</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Status Bar</div>
+                    <div class="feature-desc">Clock, quick settings, network traffic</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🧭</div>
+                    <div class="feature-title">Navigation</div>
+                    <div class="feature-desc">Gesture, 3-button, 2-button</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-title">Lock Screen</div>
+                    <div class="feature-desc">Clock style, shortcuts, media art</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Theme</div>
+                    <div class="feature-desc">Dark mode, accent colors, icon packs</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔊</div>
+                    <div class="feature-title">Sound</div>
+                    <div class="feature-desc">Volume panel, ringtones</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">App Drawer</div>
+                    <div class="feature-desc">Grid size, sorting, hidden apps</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prerequisites Section -->
+    <section class="section" id="prerequisites">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🛠️ Prasyarat</span>
+                <h2 class="section-title">Siapkan Build Machine</h2>
+                <p class="section-desc">
+                    Pastikan hardware dan software Anda memenuhi syarat minimum
+                </p>
+            </div>
+            <div class="prereq-grid">
+                <div class="prereq-card">
+                    <div class="prereq-icon">💾</div>
+                    <h3 class="prereq-title">Storage</h3>
+                    <ul class="prereq-list">
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-min">MIN</span> 500 GB</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-recommended">REKOMENDASI</span> 1 TB+</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>SSD sangat disarankan</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="prereq-card">
+                    <div class="prereq-icon">🧠</div>
+                    <h3 class="prereq-title">RAM</h3>
+                    <ul class="prereq-list">
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-min">MIN</span> 16 GB</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-recommended">REKOMENDASI</span> 32 GB+</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>Lebih banyak = lebih cepat</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="prereq-card">
+                    <div class="prereq-icon">⚙️</div>
+                    <h3 class="prereq-title">CPU</h3>
+                    <ul class="prereq-list">
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-min">MIN</span> 6 cores</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span><span class="prereq-recommended">REKOMENDASI</span> 8+ cores</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>Multi-thread build support</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="prereq-card">
+                    <div class="prereq-icon">🌐</div>
+                    <h3 class="prereq-title">Internet</h3>
+                    <ul class="prereq-list">
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>Koneksi stabil</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>Download ~100-150 GB</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-circle"></i>
+                            <span>Unlimited/Unlimited</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">📦 Software Requirements</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Software</th>
+                            <th>Versi</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fab fa-ubuntu" style="color: #ff7700;"></i> Ubuntu / Debian</td>
+                            <td>20.04 LTS / 11+</td>
+                            <td>✅ Direkomendasikan</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fab fa-python" style="color: #3776ab;"></i> Python</td>
+                            <td>3.8+</td>
+                            <td>✅ Wajib</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fab fa-java" style="color: #f89820;"></i> OpenJDK</td>
+                            <td>11</td>
+                            <td>✅ Wajib</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fab fa-git-alt" style="color: #f05032;"></i> Git</td>
+                            <td>Latest</td>
+                            <td>✅ Wajib</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-box" style="color: var(--primary);"></i> Repo Tool</td>
+                            <td>Latest</td>
+                            <td>✅ Wajib</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-database" style="color: #ff6b6b;"></i> ccache</td>
+                            <td>Latest</td>
+                            <td>✅ Sangat Disarankan</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="section" id="installation">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">📥 Instalasi</span>
+                <h2 class="section-title">Langkah-Langkah Setup</h2>
+                <p class="section-desc">
+                    Ikuti langkah-langkah berikut untuk menyiapkan environment build
+                </p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Clone Repository</h3>
+                        <p class="step-desc">Clone repository panduan ini ke komputer Anda</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">git clone</span> https://github.com/antono4/Custom-Android-OS-from-NusantaraROM.git
+<span class="command">cd</span> Custom-Android-OS-from-NusantaraROM
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Fork NusantaraProject</h3>
+                        <p class="step-desc">Fork repository yang diperlukan di GitHub</p>
+                        <div class="code-block">
+                            <code>
+<span class="comment"># Buka browser ke:</span>
+<span class="string">https://github.com/NusantaraProject-ROM/</span>
+
+<span class="comment"># Fork repository berikut:</span>
+<span class="string">✓</span> android_manifest
+<span class="string">✓</span> android_vendor_nusantara
+<span class="string">✓</span> android_packages_apps_NusantaraWings
+<span class="string">✓</span> android_packages_apps_Settings
+<span class="string">✓</span> android_frameworks_base
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Setup Build Environment</h3>
+                        <p class="step-desc">Jalankan script setup untuk install semua dependencies</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">chmod +x</span> setup_custom_rom.sh
+<span class="command">./setup_custom_rom.sh</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Buat Direktori Kerja</h3>
+                        <p class="step-desc">Buat direktori untuk source code ROM</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">mkdir</span> -p ~/custom-rom && <span class="command">cd</span> ~/custom-rom
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Build Section -->
+    <section class="section" id="build" style="background: var(--dark);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🔧 Build</span>
+                <h2 class="section-title">Proses Build ROM</h2>
+                <p class="section-desc">
+                    Ikuti alur berikut untuk membangun custom ROM Anda
+                </p>
+            </div>
+
+            <div class="flow-diagram">
+                <h3 class="flow-title">📊 Build Flow Diagram</h3>
+                <div class="flow-steps">
+                    <div class="flow-box">
+                        <i class="fas fa-download"></i>
+                        <span>Download Source</span>
+                    </div>
+                    <i class="fas fa-arrow-right flow-arrow"></i>
+                    <div class="flow-box">
+                        <i class="fas fa-edit"></i>
+                        <span>Kustomisasi</span>
+                    </div>
+                    <i class="fas fa-arrow-right flow-arrow"></i>
+                    <div class="flow-box">
+                        <i class="fas fa-cogs"></i>
+                        <span>Setup Env</span>
+                    </div>
+                    <i class="fas fa-arrow-right flow-arrow"></i>
+                    <div class="flow-box">
+                        <i class="fas fa-microchip"></i>
+                        <span>Lunch Device</span>
+                    </div>
+                    <i class="fas fa-arrow-right flow-arrow"></i>
+                    <div class="flow-box">
+                        <i class="fas fa-hammer"></i>
+                        <span>Build ROM</span>
+                    </div>
+                    <i class="fas fa-arrow-right flow-arrow"></i>
+                    <div class="flow-box">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Output IMG</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="steps-container" style="margin-top: 3rem;">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Inisialisasi Repo</h3>
+                        <p class="step-desc">Inisialisasi repo dengan manifest fork Anda</p>
+                        <div class="code-block">
+                            <code>
+<span class="comment"># Ganti USERNAME dengan username GitHub Anda</span>
+<span class="command">repo init</span> -u https://github.com/<span class="string">USERNAME</span>/android_manifest -b <span class="string">12</span>
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Sinkronisasi Source</h3>
+                        <p class="step-desc">Download semua source dari repository (bisa memakan waktu 2-6 jam)</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">repo sync</span> -c --force-sync --no-tags --no-clone-bundle -j$(nproc --all)
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Setup Environment</h3>
+                        <p class="step-desc">Load environment variables untuk build</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">source</span> build/envsetup.sh
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Pilih Device</h3>
+                        <p class="step-desc">Pilih perangkat target yang akan di-build</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">lunch</span>
+<span class="comment"># Pilih device, contoh:</span>
+<span class="command">lunch</span> nad_redfin-userdebug
+                            </code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Build ROM</h3>
+                        <p class="step-desc">Mulai proses build (bisa memakan waktu 3-8 jam)</p>
+                        <div class="code-block">
+                            <code>
+<span class="command">make</span> nad -j$(nproc --all)
+<span class="comment"># Atau lebih spesifik:</span>
+<span class="command">make</span> systemimage vendorimage -j$(nproc --all)
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">⏱️ Estimasi Waktu Build</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Hardware</th>
+                            <th>Cores</th>
+                            <th>RAM</th>
+                            <th>Waktu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Desktop Low</td>
+                            <td>4</td>
+                            <td>16 GB</td>
+                            <td>8-10 jam</td>
+                        </tr>
+                        <tr>
+                            <td>Desktop Mid</td>
+                            <td>8</td>
+                            <td>32 GB</td>
+                            <td>4-6 jam</td>
+                        </tr>
+                        <tr>
+                            <td>Desktop High</td>
+                            <td>16</td>
+                            <td>64 GB</td>
+                            <td>2-3 jam</td>
+                        </tr>
+                        <tr>
+                            <td>Server</td>
+                            <td>32+</td>
+                            <td>128 GB+</td>
+                            <td>1-2 jam</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customization Section -->
+    <section class="section" id="customize">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">🎨 Kustomisasi</span>
+                <h2 class="section-title">Menu Kustomisasi ROM</h2>
+                <p class="section-desc">
+                    Gunakan script kustomisasi atau edit manual sesuai kebutuhan
+                </p>
+            </div>
+
+            <div class="menu-preview">
+                <div class="menu-header">
+                    <h3>╔═══════════════════════════════════════╗</h3>
+                    <h3>║  🎨 Custom ROM Customization Menu  ║</h3>
+                    <h3>╚═══════════════════════════════════════╝</h3>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">1.</span>
+                    <span class="menu-icon">📝</span>
+                    <span>Ganti Nama ROM</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">2.</span>
+                    <span class="menu-icon">🏷️</span>
+                    <span>Ganti Branding/Vendor</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">3.</span>
+                    <span class="menu-icon">🎬</span>
+                    <span>Edit Boot Animation</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">4.</span>
+                    <span class="menu-icon">⚙️</span>
+                    <span>Modifikasi Settings</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">5.</span>
+                    <span class="menu-icon">🌏</span>
+                    <span>Tambah Bahasa Indonesia</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">6.</span>
+                    <span class="menu-icon">🚀</span>
+                    <span>Optimasi Performance</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">7.</span>
+                    <span class="menu-icon">🗑️</span>
+                    <span>Hapus Bloatware</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">8.</span>
+                    <span class="menu-icon">✨</span>
+                    <span>Apply Semua Modifikasi</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-num">0.</span>
+                    <span class="menu-icon">🚪</span>
+                    <span>Exit</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <div class="code-block" style="display: inline-block; text-align: left;">
+                    <code>
+<span class="comment"># Jalankan script kustomisasi</span>
+<span class="command">chmod +x</span> customize_rom.sh
+<span class="command">./</span>customize_rom.sh
+                    </code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq" style="background: var(--dark);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">❓ FAQ</span>
+                <h2 class="section-title">Pertanyaan Umum</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Berapa lama untuk build ROM pertama kali?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Tergantung hardware, biasanya 3-8 jam untuk build pertama. 
+                            Build berikutnya bisa 30 menit - 1 jam dengan ccache.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Apakah saya bisa build tanpa Linux?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Bisa dengan WSL2 di Windows 11 atau menggunakan virtual machine. 
+                            Namun, build langsung di Linux lebih stabil dan disarankan.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>ROM apa saja yang support?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Semua device yang memiliki device tree di NusantaraProject. 
+                            Untuk referensi, cek daftar device di XDA NusantaraROM.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Bagaimana cara berkontribusi?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            1. Fork repository NusantaraProject<br>
+                            2. Buat branch baru untuk fitur/fix<br>
+                            3. Commit perubahan Anda<br>
+                            4. Submit pull request
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Apakah aman untuk daily use?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Custom ROM bisa digunakan untuk daily use jika di-build dengan benar. 
+                            Namun, selalu backup data sebelum flash ke perangkat.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>📱 Custom Android OS</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    Panduan lengkap membuat custom ROM Android berbasis NusantaraProject.
+                    Dibuat dengan ❤️ di Indonesia.
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>🔗 Links</h4>
+                <ul class="footer-links">
+                    <li><a href="https://github.com/antono4/Custom-Android-OS-from-NusantaraROM">GitHub Repository</a></li>
+                    <li><a href="https://github.com/NusantaraProject-ROM">NusantaraProject</a></li>
+                    <li><a href="https://nusantararom.org">Website Resmi</a></li>
+                    <li><a href="https://forum.xda-developers.com/">XDA Developers</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>💬 Dukungan</h4>
+                <ul class="footer-links">
+                    <li><a href="https://t.me/nusantararom">Telegram Channel</a></li>
+                    <li><a href="https://github.com/antono4/Custom-Android-OS-from-NusantaraROM/issues">GitHub Issues</a></li>
+                    <li><a href="https://source.android.com/">Dokumentasi AOSP</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>
+                © 2026 Custom-Android-OS-from-NusantaraROM • 
+                Dibuat dengan ❤️ oleh <a href="https://github.com/antono4">antono4</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Loading Animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Scroll to Top
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Navigation Toggle (Mobile)
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.querySelector('.nav-links');
+        navToggle.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Smooth Scroll for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Copy Code Block on Click
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
+            block.addEventListener('click', () => {
+                const code = block.querySelector('code');
+                if (code) {
+                    navigator.clipboard.writeText(code.textContent);
+                    showToast('Copied to clipboard!');
+                }
+            });
+        });
+
+        // Toast Function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Animate on Scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .step, .feature-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
