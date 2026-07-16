@@ -1,5 +1,8 @@
 # 📱 Custom Android OS - Berbasis NusantaraProject
 
+> **Created by Antono**
+
+
 <p align="center">
   <img src="https://img.shields.io/badge/Android-12.0.0--r16-green?style=for-the-badge&logo=android&logoColor=white" alt="Android Version">
   <img src="https://img.shields.io/badge/AOSP-v12-blue?style=for-the-badge&logo=google&logoColor=white" alt="AOSP">
