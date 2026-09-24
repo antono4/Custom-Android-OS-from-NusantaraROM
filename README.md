@@ -1,14 +1,3 @@
-# NusantaraROM
-
-**Deep-System Android Engineering.**
-
-NusantaraROM is a professional-grade Android OS modification suite focusing on kernel optimization, bloatware elimination, and system-level performance tuning to deliver a streamlined, high-performance mobile experience for power users and developers.
-
-### 🚀 Key Highlights
-- Kernel-Level Tuning
-- Bloatware Removal & System Lean-up
-- Enhanced Hardware Resource Management
-
 <!-- README ini dihasilkan otomatis oleh workflow .github/workflows/generate-readme.yml -->
 <!-- Jangan edit manual; perubahan akan ditim pada run berikutnya. -->
 
@@ -22,7 +11,7 @@ NusantaraROM is a professional-grade Android OS modification suite focusing on k
   <a href="https://github.com/antono4/Custom-Android-OS-from-NusantaraROM"><img alt="GitHub repo" src="https://img.shields.io/badge/GitHub-antono4/Custom-Android-OS-from-NusantaraROM-blue?logo=github"></a>
   <a href="https://antono4.github.io/Custom-Android-OS-from-NusantaraROM/"><img alt="Live Demo" src="https://img.shields.io/badge/Live%20Demo-Online-success?logo=githubpages"></a>
   <img alt="Files" src="https://img.shields.io/badge/Files-16-informational">
-  <img alt="Updated" src="https://img.shields.io/badge/Updated-2026-09-24 07:53:54 WIB-lightgrey">
+  <img alt="Updated" src="https://img.shields.io/badge/Updated-2026-09-24 11:11:53 WIB-lightgrey">
 </p>
 
 ---
@@ -72,4 +61,4 @@ Lihat berkas [`LICENSE`](./LICENSE) untuk informasi lisensi.
 
 ---
 
-<sub>README ini di-generate otomatis pada **2026-09-24 07:53:54 WIB** oleh GitHub Actions `.github/workflows/generate-readme.yml`.</sub>
+<sub>README ini di-generate otomatis pada **2026-09-24 11:11:53 WIB** oleh GitHub Actions `.github/workflows/generate-readme.yml`.</sub>
