@@ -1,3 +1,14 @@
+# NusantaraROM
+
+**Deep-System Android Engineering.**
+
+NusantaraROM is a professional-grade Android OS modification suite focusing on kernel optimization, bloatware elimination, and system-level performance tuning to deliver a streamlined, high-performance mobile experience for power users and developers.
+
+### 🚀 Key Highlights
+- Kernel-Level Tuning
+- Bloatware Removal & System Lean-up
+- Enhanced Hardware Resource Management
+
 <!-- README ini dihasilkan otomatis oleh workflow .github/workflows/generate-readme.yml -->
 <!-- Jangan edit manual; perubahan akan ditim pada run berikutnya. -->
 
