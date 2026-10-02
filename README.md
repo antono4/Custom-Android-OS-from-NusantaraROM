@@ -1,1 +1,26 @@
-Last updated: 2026-10-02 15:30:49 WIB
+# Custom-Android-OS-from-NusantaraROM
+
+
+
+## 📋 Overview
+
+This repository contains **19 files** and is built with the following technologies:
+
+HTML
+
+## 🚀 Quick Start
+
+## ✨ Features
+
+- 📝 Auto-generated documentation
+
+## 🛠️ Technologies
+
+HTML
+
+## 📄 License
+
+MIT License
+
+---
+*Last updated: 2026-10-02 19:24:16 WIB*
